@@ -1,6 +1,8 @@
 \ProvidesPackage{MyArticle}
 
+
 \RequirePackage[heading]{ctex}%ctexcap过时了
+
 \RequirePackage{xeCJK}
 \RequirePackage{geometry}%这个是调整版面的这个要在fancyhdr前面使用
 \RequirePackage{multirow}%这个是表格制作要用的
@@ -18,12 +20,11 @@
 \RequirePackage{xcolor,color}%颜色控制
 \RequirePackage{expl3}%latex3使用的宏包
 \RequirePackage{wrapfig}%行内图片
-
 \usepackage{float}%这个不让插图乱跑的，可以固定图片的位置设定[H]
 
 \RequirePackage{marginnote}%边注的
 \RequirePackage{mparhack}%这个是修\marginpar的bug的可以使边注不乱跑
-
+\RequirePackage{amsmath}
 
 \RequirePackage{emptypage}
 \cleardoublepage%去除空白页的页眉与页脚
