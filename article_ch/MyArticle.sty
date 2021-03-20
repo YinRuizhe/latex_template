@@ -1,0 +1,310 @@
+\ProvidesPackage{MyArticle}
+
+\RequirePackage[heading]{ctex}%ctexcap过时了
+\RequirePackage{xeCJK}
+\RequirePackage{geometry}%这个是调整版面的这个要在fancyhdr前面使用
+\RequirePackage{multirow}%这个是表格制作要用的
+\RequirePackage{graphics}%这个是插入图片的
+\RequirePackage{xcolor}%这个是改文字颜色的
+\RequirePackage{mathtools,booktabs}%这个是数学符号
+\RequirePackage{fourier-orns}%特殊符号
+\RequirePackage{tikz,mathpazo}%这个是强大的绘图包
+\RequirePackage{ifthen}%这个可以控制
+\RequirePackage{lastpage}%提供最后一页的页码
+\RequirePackage{verbatim}%多行注释
+\RequirePackage{subfigure}%子图片
+\RequirePackage{tikz}%绘图的
+\RequirePackage{ifthen}%if控制
+\RequirePackage{xcolor,color}%颜色控制
+\RequirePackage{expl3}%latex3使用的宏包
+\RequirePackage{wrapfig}%行内图片
+
+\usepackage{float}%这个不让插图乱跑的，可以固定图片的位置设定[H]
+
+\RequirePackage{marginnote}%边注的
+\RequirePackage{mparhack}%这个是修\marginpar的bug的可以使边注不乱跑
+
+
+\RequirePackage{emptypage}
+\cleardoublepage%去除空白页的页眉与页脚
+
+
+%\geometry{height=1cm,bottom=1cm,left=1cm,rgith=1cm}%这个是页边距的设置
+
+%\setCJKmainfont{Songti SC}%mac这个设置正文字体
+%\setCJKmainfont{宋体}%win不兼容
+\ctexset{today=small}% small old 日期的格式设置
+\ctexset{
+	contentsname=目录,
+	listfigurename=插图,
+	listtablename=表格,
+	figurename=图,
+	tablename=表,
+	abstractname=摘要,
+	indexname=索引,
+	appendixname=附录,
+	bibname=参考文献
+}
+
+%\pagestyle{headings}%在页眉中显示当前章节的编号与标题
+
+%下面设置在ctex看主要是节的设置
+\ctexset{
+	section = {
+		name = {},%设置章节的名字。名字可以分为前后两部分
+		nameformat={\kaishu},%用于控制章节名字的格式
+		number = \Chinese{section},%\Roman \arabic \Chinese \alph 设置章节编号的数字输出格式
+		numberformat={},% 选项用于控制章节编号的格式
+		numbering = true,%控制是否对章节标题编号
+		format= {\large\bfseries\centering},%这个变化就很多自由度很高
+		aftername=\quad,%选项的参数 ⟨代码⟩ 将被插入到章节编号与其后的标题内容之间，用于控制格式变换。常用于控制章节编号与标题内容之间的距离，或者控制标题是否另起一行
+		titleformat={\kaishu},%灵活用于控制章节名字的内容
+		%aftertitle={},%选项的参数 ⟨代码⟩ 将被插入到章节标题内容之后。
+		runin=false,%用于确定标题与随后的正文是否排在同一段之上
+		afterindent=true,%选项用于设置章节标题后首段的缩进
+		beforeskip=3.5ex plus 1ex minus .2ex,%选项用于设置章节标题前的垂直间距
+		afterskip=2.3ex plus .2ex,%选项控制章节标题与后面下方之间的距离
+		indent=0pt,%选项用于设置章节标题本身的首行缩进
+		hang = true,%选项用于设置是否对章节标题实施悬挂缩进（缩进的宽度为名字宽度和 indent 选项设置的宽度之和）。
+		tocline =\CTEXnumberline{#1}#2,%选项用于定义章节标题在目录文件.toc的格式
+		},
+	subsection = {
+		name = {},
+		number = \thesubsection,
+		numbering = true,
+		format= \centering,
+		titleformat={},
+		aftertitle={},
+		numberformat={},
+		afterindent=true,
+		},
+	subsubsection = {
+		name={},
+	}
+}
+
+\ctexset{
+	appendix={
+		numbering=true,%控制是否对附录章（对 book 与 report）或附录节（对 article）进行编号
+	}
+}
+\RequirePackage{fontspec}%字体的设置
+
+\RequirePackage{fancyhdr}%这个主要是页眉叶脚的控制
+
+\fancypagestyle{plain}{%这个设置是plain格式，第一页默认plain
+\fancyhf{} % 清空当前设置
+%\fancyhead[L]{\CTEXthesection}
+%\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+}
+
+%原来这个格式是不一样的
+
+\pagestyle{fancy}% 选用 fancy style
+	\fancyhf{}
+	\fancyhead{} % Blank out the default header
+	\fancyfoot{} % Blank out the default footer
+	\fancyhead[L]{\rightmark}
+	\fancyhead[R]{\thepage \ of \pageref{LastPage}}
+	%\fancyfoot[L]{\vspace{-4pt}写于 \today}
+	\renewcommand{\headrulewidth}{0.4pt}
+	\renewcommand{\footrulewidth}{0.4pt}
+	\renewcommand{\sectionmark}[1]{%这个东西是设置页眉的节标题的因为是article的原因所以用markright
+	\markright{\CTEXifname{\CTEXthesection \quad}{}#1}}
+
+\renewcommand\headrule{%这个东西是对全局更改的
+\vspace{-6pt}
+\hrulefill
+\raisebox{-2.1pt}
+{\quad\decofourleft\decotwo\decofourright\quad}%
+\hrulefill
+}
+
+\renewcommand\footrule{%这个东西是对全局更改的这个可能会短时间报错改那个格式的。
+	\vspace{0pt}%这个就有问题了。控制不了,需要在页脚哪里控制
+\hrulefill
+\raisebox{-2.1pt}
+{\quad\decofourleft\decotwo\decofourright\quad}%
+\hrulefill
+}
+
+
+
+%这我也不知道是什么拿来就可以了
+%\usetikzlibrary{shadows,arrows,positioning,shapes.geometric} 
+%\usetikzlibrary{calc}
+%\usetikzlibrary{chains}%这个可以快速的画链
+%\usetikzlibrary{mindmap}%这个是思维导图
+
+\RequirePackage[colorlinks,
+linkcolor=black,
+anchorcolor=black,
+citecolor=black
+]{hyperref}%这个是制作超链接的
+
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+
+\graphicspath{{Images/}}%这个是改图片的位置的
+
+\setcounter{tocdepth}{2}%设置在 ToC 的显示的章节深度
+\setcounter{secnumdepth}{3}%设置章节的编号深度这个我不知道有什么用
+
+\renewcommand{\maketitle}{ % Customize the title - do not edit title and author name here, see the TITLE block below
+\begin{flushright} % Right align
+{\LARGE\@title} % Increase the font size of the title
+
+\vspace{50pt} % Some vertical space between the title and author name
+
+{\large\@author} % Author name
+\\\@date % Date
+
+\vspace{40pt} % Some vertical space between the author block and abstract
+\end{flushright}
+}
+
+
+
+\bibliographystyle{alpha}%参考文献格式
+
+%-1 part
+%0 chapter
+%1 section
+%2 subsection
+%3 subsubsection
+%4 paragraph
+%5 subparagraph
+
+%罗马体 \textrm{} \rmfamily
+%无衬线 \textsf{} \sffamily
+%打字机 \texttt{} \ttfamily
+
+%直立 \textup{} \upshape
+%意大利 \textit{} \itshape
+%倾斜 \textsl{} \slshape
+%小型大写 \textsc{} \scshape
+
+%中等 \textmd{} \mdseries 
+%加粗加宽 \textbf{} \bfseries
+
+
+%\songti 宋体
+%\kaishu 楷体
+%\heiti 黑体
+%\yahei 微软雅黑
+%\fangsong 仿宋
+%\youyuan 幼圆
+%\lishu 隶书
+
+%texdoc fntguide psnfss查看字体
+%\zhdigits{}转化命令
+
+%长度单位pt pc in bp cm mm dd cc sp em ex
+%水平间距 \thinspace \negthinspace \enspace \nobreakspace
+%\quad \qquad \enskip \   \haspace   <普通长度>plus<可伸长长度>minus<可缩短长度>
+
+%\makebox[宽度][位置c l r s ]{内容}
+%framebox[][]{}有边框的盒子
+%记数器的使用很高级
+
+%\marginpar边注的命令
+
+%\newcommand{}[][]{}
+%\renewcommand{}[][]{}
+%\newenvironment{}{}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+%这里是标准插入图片
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{Images/}
+	\caption{}
+	\label{}
+\end{figure}
+下面是两个小图作为子图
+\begin{figure}
+	\centering
+	\subfigure[]{
+		\begin{minipage}
+			\includegraphics[width=5cm]{Images/}
+		\end{minipage}
+	}
+	\subfigure[]{
+		\begin{minipage}
+			\includegraphics[width=5cm]{Images/}
+		\end{minipage}
+	}
+	
+	\caption{}
+	\label{}
+\end{figure}
+
+两个小图作为独立的图
+\begin{figure}
+	\begin{minipage}[t]{0.5\linewidth}
+		\centering
+		\includegraphics[width=2.2in]{fig1.eps}
+		\caption{fig1}
+		\label{fig:side:a}
+	\end{minipage}%
+
+	\begin{minipage}[t]{0.5\linewidth}
+		\centering
+		\includegraphics[width=2.2in]{fig2.eps}
+		\caption{fig2}
+		\label{fig:side:b}
+	\end{minipage}
+\end{figure}
+
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{comment}
+
+简单的三线表
+\begin{table}[]
+\begin{tabular}{ccc}
+\hline
+ &  &  \\ \hline
+ &  &  \\
+ &  &  \\ \hline
+\end{tabular}
+\caption{}
+\label{}
+\end{table}
+双表并列
+\begin{table}
+	\begin{minipage}
+		\centering
+		\begin{tabular}{ccc}
+		\hline
+		 &  &  \\ \hline
+		 &  &  \\
+		 &  &  \\ \hline
+		\end{tabular}
+		\caption{}
+		\label{}
+	\end{minipage}
+
+	\begin{minipage}
+		\centering
+		\begin{tabular}{ccc}
+		\hline
+		 &  &  \\ \hline
+		 &  &  \\
+		 &  &  \\ \hline
+		\end{tabular}
+		\caption{}
+		\label{}
+	\end{minipage}
+
+
+\end{table}
+
+
+复杂的表格https://www.tablesgenerator.com/
+
+\end{comment}
